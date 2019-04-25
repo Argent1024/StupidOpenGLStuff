@@ -1,0 +1,13 @@
+Add texture ✔️
+
+
+Add light
+Add/modify diffuse phong shader
+
+BVH
+Add Physics particles & rigid body
+
+Load meshes
+
+Draw balls?
+Add glass?
