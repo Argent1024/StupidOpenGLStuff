@@ -14,20 +14,21 @@ enum PhysicType {
     PRATICLE
 };
 
-
 const float DT = 1 / 30.f;
 
 class PhysicState {
-// protected:
+	// protected:
 public:
- // The transform
+	// The transform
     glm::vec3 transition;
+	glm::mat3 rotation;
 
     PhysicState() {
+		rotation = glm::mat3(1.f);
         transition = glm::vec3(0.f);
     }
 
-    PhysicState(glm::vec3& v):transition(v) {}
+    PhysicState(glm::mat3 r, glm::vec3& v):rotation(r),transition(v) {}
 
     virtual void update() = 0;
     virtual void setShader(shared_ptr<Shader>& shader) = 0;
@@ -47,7 +48,6 @@ class RigidBody : public PhysicState {
 private:
     // const float mass;
     // const glm::vec3 center;
-    glm::mat3 rotation;
     glm::vec3 velocity;
     glm::vec3 anagular;
 
@@ -94,28 +94,6 @@ public:
                  <<rotation[2][0]<<" "<<rotation[2][1]<<" "<<rotation[2][2]<<"\n"
                  <<std::endl;*/   
     }
-};
-
-
-class Praticle : public PhysicState {
-private:
-    glm::vec3 velocity;
-
-    void updateLinearV() {
-        transition += DT * velocity;
-    }
-
-public:
-    Praticle(glm::vec3& t):PhysicState(t){}
-
-   void update() {
-       return;
-   }
-
-   void setShader(shared_ptr<Shader>& shader) {
-       return;
-   }
-
 };
 
 #endif

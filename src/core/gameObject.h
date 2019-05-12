@@ -28,7 +28,7 @@ public:
         } else if(type == RIGIDBODY) {
             this->physic = make_unique<RigidBody>();
         } else if(type == PRATICLE){
-            this->physic == make_unique<Praticle>(transition);
+            // this->physic == make_unique<Praticle>(transition);
         } else {
             cout<< "Wrong type creating physic obj: "<<type<<endl;
         }
@@ -38,6 +38,7 @@ public:
 
     inline bool setTexture(string& name) {
         this->texture = GameTexManger.get(name);
+		return true;
     }
 
     inline void update() {
@@ -59,7 +60,6 @@ public:
 
 /*
     TODO 
-    ball, trimesh object
 */
 struct Vertex {
     glm::vec3 pos;

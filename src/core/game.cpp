@@ -1,6 +1,7 @@
 #include "game.h"
 #include "loader.h"
 
+// init resorce manger
 ShaderManger GameShaderManger;
 TextureManger GameTexManger;
 
@@ -26,7 +27,7 @@ int Game::init() {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-
+	
 	// Initialize GLEW
 	glewExperimental = true; 
 	if (glewInit() != GLEW_OK) {
@@ -35,13 +36,14 @@ int Game::init() {
 		glfwTerminate();
 		return -1;
 	}
-
+	
     load();
     return 1;
 }
 
 int Game::load() {
-    string path = "/home/argent/work/game/src/";
+    //string path = "/home/argent/work/game/src/";
+	string path = "D:/work/game/src/";
     string vp =  path +"shaders/testvertex.glsl";
     string fp =  path +"shaders/testfragment.glsl";
     string texp = path + "textures/wall.jpg";
@@ -78,7 +80,8 @@ int Game::load() {
         0, 1, 3, 
         1, 2, 3
     };
-    TriMesh* testMesh = new TriMesh("testshader", v, indices, RIGIDBODY); 
+	string shadername = "testshader";
+    TriMesh* testMesh = new TriMesh(shadername, v, indices, RIGIDBODY); 
     testMesh->setTexture(tname);
     objs.push_back(testMesh);   
     return 0;
