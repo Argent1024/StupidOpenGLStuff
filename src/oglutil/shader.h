@@ -194,12 +194,12 @@ private:
 };
 
 
-class ShaderManger{
+class ShaderManager{
 private:
     std::map<std::string, std::shared_ptr<Shader>> shaderList;
 
 public:
-    ShaderManger() {}
+    ShaderManager() {}
 
     void load(const std::string& shaderName,
               const std::string& vertexPath, 

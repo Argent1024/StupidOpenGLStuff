@@ -10,8 +10,10 @@ using namespace std;
 
 #include "oglutil/shader.h"
 #include "oglutil/texture.h"
+#include "shape.h"
 
-extern TextureManger GameTexManger;
-extern ShaderManger GameShaderManger;
+extern TextureManager GameTexManger;
+extern ShaderManager GameShaderManger;
+extern ShapeManager GameShapeManger;
 
 #endif

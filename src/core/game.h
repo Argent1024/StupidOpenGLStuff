@@ -8,6 +8,7 @@
 #include "loader.h"
 #include "bvh.h"
 #include "gameObject.h"
+#include "shape.h"
 
 class Game {
 private:

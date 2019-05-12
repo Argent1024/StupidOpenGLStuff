@@ -14,7 +14,7 @@
 
 using namespace std;
 
-class TextureManger {
+class TextureManager {
 private:
     map<string, unsigned int> m;
 

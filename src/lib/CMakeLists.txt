@@ -31,23 +31,22 @@ set(OPENGL_LIBRARY
 )
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
-
-#[[### GLEW ###
+### GLEW ###
 
 set(GLEW_SOURCE
-	glew-1.13.0/src/glew.c
+	glew-2.1.0/src/glew.c
 )
 
 set(GLEW_HEADERS
 )
 
 
-add_library( GLEW_1130 STATIC
+add_library( GLEW STATIC
 	${GLEW_SOURCE}
 	${GLEW_INCLUDE}
 )
 
-target_link_libraries(GLEW_1130
+target_link_libraries(GLEW
 	${OPENGL_LIBRARY}
 	${EXTRA_LIBS}
-)]]
+)

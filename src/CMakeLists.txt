@@ -22,6 +22,7 @@ add_executable(Gmain
 set(ALL_LIBS
 	${OPENGL_LIBRARY}
 	glfw
+	GLEW
 )
 
 target_link_libraries(Gmain 

@@ -2,8 +2,9 @@
 #include "loader.h"
 
 // init resorce manger
-ShaderManger GameShaderManger;
-TextureManger GameTexManger;
+ShaderManager GameShaderManger;
+TextureManager GameTexManger;
+ShapeManager GameShapeManger;
 
 int Game::init() {
     if( !glfwInit() )
@@ -42,14 +43,6 @@ int Game::init() {
 }
 
 int Game::load() {
-    //string path = "/home/argent/work/game/src/";
-	string path = "D:/work/game/src/";
-    string vp =  path +"shaders/testvertex.glsl";
-    string fp =  path +"shaders/testfragment.glsl";
-    string texp = path + "textures/wall.jpg";
-    string tname = "testtex";
-    GameShaderManger.load("testshader", vp, fp);
-    GameTexManger.load(tname, texp);
 
     Vertex a(
         glm::vec3(0.5f, 0.5f, 0.0f),
@@ -80,10 +73,23 @@ int Game::load() {
         0, 1, 3, 
         1, 2, 3
     };
-	string shadername = "testshader";
-    TriMesh* testMesh = new TriMesh(shadername, v, indices, RIGIDBODY); 
-    testMesh->setTexture(tname);
-    objs.push_back(testMesh);   
+    
+    string path = "/home/argent/work/game/src/";
+	//string path = "D:/work/game/src/";
+    string vp =  path +"shaders/testvertex.glsl";
+    string fp =  path +"shaders/testfragment.glsl";
+    string texp = path + "textures/wall.jpg";
+    string texname = "testtex";
+    string shadername = "testshader";
+    GameShaderManger.load(shadername, vp, fp);
+    GameTexManger.load(texname, texp);
+
+    string shapename = "testMesh";
+    TriMesh testMesh(v, indices);
+    GameShapeManger.load(shapename, testMesh);
+
+    GameObject* testObj = new GameObject(shadername, shapename, texname, RIGIDBODY);
+    this->objs.push_back(testObj);
     return 0;
 }
 
