@@ -12,7 +12,6 @@ out vec2 texcor;
 
 void main() {
     gl_Position = vec4(rotation * v_position + transition, 1);
-
     normal = normalize(rotation * v_normal);
     texcor = v_texture;
 }

@@ -19,7 +19,7 @@ int Game::init() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    window = glfwCreateWindow( 1024, 768, "Playground", NULL, NULL);
+    window = glfwCreateWindow(720, 720, "Playground", NULL, NULL);
 
     if( window == NULL ){
 		fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
@@ -37,7 +37,7 @@ int Game::init() {
 		glfwTerminate();
 		return -1;
 	}
-	
+
     load();
     return 1;
 }
@@ -68,25 +68,40 @@ int Game::load() {
         glm::vec2(0.0f, 1.0f) 
     );
 
-    vector<Vertex> v = {a, b, c, d};
+    Vertex e(
+        glm::vec3(0.0f, 0.0f, -0.5f),
+        glm::vec3(0.0f, 0.0f, 1.0f),  
+        glm::vec2(0.5f, 0.5f) 
+    );
+
+    vector<Vertex> v = {a, b, c, d, e};
     vector<unsigned int> indices = {
         0, 1, 3, 
-        1, 2, 3
+        1, 2, 3,
+        4, 0, 1,
+        4, 0, 3,
+        4, 1, 2,
+        4, 2, 3
     };
     
     string path = "/home/argent/work/game/src/";
 	//string path = "D:/work/game/src/";
     string vp =  path +"shaders/testvertex.glsl";
     string fp =  path +"shaders/testfragment.glsl";
-    string texp = path + "textures/wall.jpg";
+    //string texp = path + "textures/wall.jpg";
+    string texp = path + "textures/earth.jpg";
     string texname = "testtex";
     string shadername = "testshader";
     GameShaderManger.load(shadername, vp, fp);
     GameTexManger.load(texname, texp);
 
     string shapename = "testMesh";
-    TriMesh testMesh(v, indices);
-    GameShapeManger.load(shapename, testMesh);
+    vector<Vertex> b_vertex;
+    vector<unsigned int> b_indices;
+    
+    BallHelper::initVertices(30, 0.5f, b_vertex, b_indices);
+
+    GameShapeManger.load(shapename, b_vertex, b_indices);
 
     GameObject* testObj = new GameObject(shadername, shapename, texname, RIGIDBODY);
     this->objs.push_back(testObj);
@@ -94,10 +109,10 @@ int Game::load() {
 }
 
 int Game::run() {
-    glm::mat4 T = glm::mat4(1.f);
-    T = glm::rotate(T, glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 1.0f));   
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     do{
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
         // Render objects
         for(GameObj* obj : objs) {
