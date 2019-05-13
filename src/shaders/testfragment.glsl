@@ -10,7 +10,6 @@ uniform sampler2D texture1;
 void main() {
     //color = vec4(normal, 1.f);
     //color = vec4(1.f, 0.f, 0.f, 1.f);
-    color = abs(dot(normal, vec3(0.f, 0.f, 1.f))) * texture(texture1, texcor) 
-            + vec4(0.2f,0.2f,0.2f,0.2f);
+    color = abs(dot(normal, vec3(0.f, 0.f, 1.f))) * texture(texture1, texcor);
 }
 

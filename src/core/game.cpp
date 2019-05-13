@@ -5,6 +5,7 @@
 ShaderManager GameShaderManger;
 TextureManager GameTexManger;
 ShapeManager GameShapeManger;
+Camera GameCamera;
 
 int Game::init() {
     if( !glfwInit() )
@@ -89,7 +90,9 @@ int Game::load() {
     string vp =  path +"shaders/testvertex.glsl";
     string fp =  path +"shaders/testfragment.glsl";
     //string texp = path + "textures/wall.jpg";
-    string texp = path + "textures/earth.jpg";
+    //string texp = path + "textures/2k_earth_repeat.jpg";
+    //string texp = path + "textures/2k_jupiter.jpg";
+    string texp = path + "textures/PoolBallSkins/Ball9.jpg";
     string texname = "testtex";
     string shadername = "testshader";
     GameShaderManger.load(shadername, vp, fp);
@@ -99,11 +102,12 @@ int Game::load() {
     vector<Vertex> b_vertex;
     vector<unsigned int> b_indices;
     
-    BallHelper::initVertices(30, 0.5f, b_vertex, b_indices);
+    BallHelper::initVertices(100, 0.5f, b_vertex, b_indices);
 
     GameShapeManger.load(shapename, b_vertex, b_indices);
+    shared_ptr<BoundingVolume> bv = make_shared<Sphere>(0.5);
 
-    GameObject* testObj = new GameObject(shadername, shapename, texname, RIGIDBODY);
+    GameObject* testObj = new GameObject(shadername, shapename, bv, texname, RIGIDBODY);
     this->objs.push_back(testObj);
     return 0;
 }
@@ -111,6 +115,8 @@ int Game::load() {
 int Game::run() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+
+    glfwSetKeyCallback(window, Game::key_callback);
     do{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
@@ -129,8 +135,8 @@ int Game::run() {
 		glfwPollEvents();
 
 	} // Check if the ESC key was pressed or the window was closed
-	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-		   glfwWindowShouldClose(window) == 0 );
+	while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS && 
+           glfwWindowShouldClose(window) == 0 );
     glfwTerminate();
     return 0;
 }

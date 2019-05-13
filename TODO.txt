@@ -1,13 +1,19 @@
 Add texture ✔️
-
+Draw balls ✔️
 
 Add light
 Add/modify diffuse phong shader
 
 BVH
-Add Physics particles & rigid body
+Add Physics 
+	particles 
+	rigid body
 
 Load meshes
 
-Draw balls ✔️
+Add Camera ✔️
+Keyboard & Mouse input
+
+Save render result to video file
+
 Add glass?

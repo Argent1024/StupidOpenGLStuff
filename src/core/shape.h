@@ -113,22 +113,23 @@ public:
 			for(int pcount = 0; pcount < sample; pcount++) {
 				// uniform sample point
 				double cosTheta = 2.0 * (double)(tcount + 1) / n - 1.0;
-				double sinTheta = glm::sqrt(1 - cosTheta * cosTheta);
+				double theta = glm::acos(cosTheta);
+				double sinTheta = glm::sin(theta);
 				/*
 				double Theta = twoPi * tcount / n - Pi;
 				double cosTheta = glm::cos(Theta);
 				double sinTheta = glm::sin(Theta);
 				*/
-				double phi = twoPi * pcount / n;
+				double phi = twoPi * pcount / sample;
 				double sinPhi = glm::sin(phi);
 				double cosPhi = glm::cos(phi);
 				float x = r*sinTheta*cosPhi;
 				float y = r*sinTheta*sinPhi;
 				float z = r*cosTheta;
 				glm::vec3 pos(x, y, z);
-
-				double tex_x = pcount / n;
-				double tex_y = tcount / n;
+				//TODO fix coordinate
+				double tex_x = phi / twoPi;
+				double tex_y = theta / Pi;
 				glm::vec2 texcoor(tex_x, tex_y);
 				// normal equals to pos
 				vertices.push_back(Vertex(pos, glm::normalize(pos), texcoor));
@@ -137,12 +138,12 @@ public:
 
 		unsigned int n_index = vertices.size();
 		glm::vec3 northpole(0.f, 0.f, r);
-		glm::vec2 tex_northpole(0.5f, 1.f);
+		glm::vec2 tex_northpole(0.5f, 0.f);
 		vertices.push_back(Vertex(northpole, glm::normalize(northpole), tex_northpole));
 
 		unsigned int s_index = vertices.size();
 		glm::vec3 sourthpole(0.f, 0.f, -r);
-		glm::vec2 tex_sourthpole(0.5f, 0.f);
+		glm::vec2 tex_sourthpole(0.5f, 1.f);
 		vertices.push_back(Vertex(sourthpole, glm::normalize(sourthpole), tex_sourthpole));
 
 		// create index

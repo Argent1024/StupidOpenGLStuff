@@ -12,14 +12,11 @@ using namespace std;
 
 class GameObj {
 protected:
-   
-    // unique_ptr<PhysicState> physic;
     shared_ptr<Shader> shader; 
     shared_ptr<Shape> shape;
 public:
     GameObj(const string& shaderName, const string& shapeName) 
     {
-        
         this->shader = GameShaderManger.get(shaderName);
         this->shape = GameShapeManger.get(shapeName);   
     }
@@ -30,20 +27,21 @@ public:
 
 class GameObject: public GameObj {
 private:
-    unique_ptr<PhysicState> physic;
+    shared_ptr<PhysicState> physic;
     unsigned int texture;
 
 public:
     GameObject(const string& shaderName, const string& shapeName,
+               shared_ptr<BoundingVolume> bv,
                const string& textureName="",
                const PhysicType type=NOPHYSIC) : GameObj(shaderName, shapeName)
     {
         this->texture = GameTexManger.get(textureName);
         
         if(type == NOPHYSIC) {
-            this->physic = make_unique<NoPhysic>();
+            this->physic = make_shared<NoPhysic>(bv);
         } else if(type == RIGIDBODY) {
-            this->physic = make_unique<RigidBody>();
+            this->physic = make_shared<RigidBody>(bv);
         } else {
             cout<< "Wrong type creating physic obj: "<<type<<endl;
         }
@@ -54,6 +52,8 @@ public:
     }
     
     void render() {
+        //TODO avoid hard code?
+        GameCamera.setShader(this->shader);
         this->physic->setShader(this->shader);
         this->shape->render(this->shader, this->texture);
     }

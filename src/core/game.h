@@ -21,6 +21,11 @@ public:
     
     int load();
 
+    // TODO hard code....
+    static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+        GameCamera.updateInput(key, action);
+    }
+
     // Game loop
     int run();
 };
