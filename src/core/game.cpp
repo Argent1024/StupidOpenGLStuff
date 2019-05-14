@@ -6,6 +6,7 @@ ShaderManager GameShaderManger;
 TextureManager GameTexManger;
 ShapeManager GameShapeManger;
 Camera GameCamera;
+PhysicWorld GamePhysic;
 
 int Game::init() {
     if( !glfwInit() )
@@ -92,23 +93,41 @@ int Game::load() {
     //string texp = path + "textures/wall.jpg";
     //string texp = path + "textures/2k_earth_repeat.jpg";
     //string texp = path + "textures/2k_jupiter.jpg";
-    string texp = path + "textures/PoolBallSkins/Ball9.jpg";
-    string texname = "testtex";
+    string texp = path + "textures/PoolBallSkins/";
+    string ball1 = "Ball1.jpg";
+    GameTexManger.load(ball1, texp + ball1);
+
+    string ball2 = "Ball2.jpg";
+    GameTexManger.load(ball2, texp + ball2);
+
+    string ball3 = "Ball3.jpg";
+    GameTexManger.load(ball3, texp + ball3);
+
     string shadername = "testshader";
     GameShaderManger.load(shadername, vp, fp);
-    GameTexManger.load(texname, texp);
 
     string shapename = "testMesh";
     vector<Vertex> b_vertex;
     vector<unsigned int> b_indices;
     
-    BallHelper::initVertices(100, 0.5f, b_vertex, b_indices);
+    BallHelper::initVertices(40, 0.2f, b_vertex, b_indices);
 
     GameShapeManger.load(shapename, b_vertex, b_indices);
-    shared_ptr<BoundingVolume> bv = make_shared<Sphere>(0.5);
+    glm::mat3 R(1.f);
 
-    GameObject* testObj = new GameObject(shadername, shapename, bv, texname, RIGIDBODY);
-    this->objs.push_back(testObj);
+    glm::vec3 c1(-.5f, 0.f, 0.f);
+    shared_ptr<BoundingVolume> bv1 = make_shared<Sphere>(0.2, c1);
+    GameObj* obj1 = createObj(shadername, shapename, bv1, R, c1, ball1, RIGIDBODY);
+    obj1->applyForce(glm::vec3(-0.7f, 0.f, 0.0f), glm::vec3(5.f, 0.f, 0.f));
+
+    glm::vec3 c2(-0.5f, 0.f, 0.f);
+    shared_ptr<BoundingVolume> bv2 = make_shared<Sphere>(0.2, c2);
+    //GameObj* obj2 = createObj(shadername, shapename, bv2, R, c2, ball2, RIGIDBODY);
+
+    glm::vec3 c3(0.5f, 0.f, -0.15f);
+    shared_ptr<BoundingVolume> bv3 = make_shared<Sphere>(0.2, c3);
+    GameObj* obj3 = createObj(shadername, shapename, bv3, R, c3, ball3, RIGIDBODY);
+    obj3->applyForce(glm::vec3(0.7f, 0.f, -0.15f), glm::vec3(-5.f, 0.f, 0.f));
     return 0;
 }
 
@@ -129,6 +148,7 @@ int Game::run() {
         for(GameObj* obj : objs) {
             obj->update();
         }
+        GamePhysic.collisionDetection();
 
 		// Swap buffers
 		glfwSwapBuffers(window);

@@ -15,6 +15,19 @@ private:
     GLFWwindow* window;
     vector<GameObj*> objs;
 
+    GameObject* createObj(const string& shaderName, const string& shapeName,
+                   shared_ptr<BoundingVolume> bv,
+                   glm::mat3 rotation,
+                   glm::vec3 transation,
+                   const string& texname,
+                   const PhysicType type) 
+    {
+        GameObject* testObj = new GameObject(shaderName, shapeName, bv, 
+                                              rotation, transation, texname, type);
+        this->objs.push_back(testObj);
+        return testObj;
+    }
+
 public:
     // initialize all stuff, load everything
     int init();
