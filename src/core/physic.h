@@ -49,8 +49,13 @@ public:
         return;
     }
 
+    // Force field
+    virtual void updateForce(const glm::vec3& F) {
+        return;
+    }
+
     virtual void getVelocityAt(const glm::vec3& p, glm::vec3& normal, glm::vec3& v) = 0;
-    virtual void update() = 0;
+    virtual void update(float dt) = 0;
     virtual void setShader(shared_ptr<Shader>& shader) = 0;
     virtual glm::vec3 getv() = 0;
 };
@@ -71,7 +76,7 @@ public:
         v = glm::vec3(0.f);
     }
 
-    void update() {
+    void update(float dt) {
         return;
     }
     void setShader(shared_ptr<Shader>& shader){
@@ -87,7 +92,7 @@ private:
     glm::vec3 P; // Linear Momentum
     glm::vec3 L; // Angular Momentum
 
-    void updateRotation() {
+    void updateRotation(float dt) {
         if(glm::length(angular) <= 0.001f) {
             return;
         }
@@ -99,7 +104,7 @@ private:
                          -y, x, 0.f);
         // Derivation of rotation
         glm::mat3 dR =  crossw * rotation;
-        rotation += DT * dR;
+        rotation += dt * dR;
 
         //TODO avoid numerical error
         rotation[0] = glm::normalize(rotation[0]);
@@ -107,11 +112,11 @@ private:
         rotation[2] = glm::normalize(rotation[2]);
     }
 
-    void updateTransition() {
+    void updateTransition(float dt) {
         if(glm::length(velocity) <= 0.001f) {
             return;
         }
-        transition += DT * velocity;
+        transition += dt * velocity;
     }
 
 public:
@@ -151,9 +156,15 @@ public:
         angular = Iinv * L;
     }
 
-    void update() {
-        updateRotation();
-        updateTransition();
+    void updateForce(const glm::vec3& F) {
+        P += DT * F;
+        float mass = bv->mass;
+        velocity = P / mass;
+    }
+
+    void update(float dt) {
+        updateRotation(dt);
+        updateTransition(dt);
         this->bv->update(rotation, transition);
         //updateForce(glm::vec3(0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     }
@@ -178,6 +189,13 @@ public:
         phyobjs.push_back(phy);
     }
 
+    void updateForceField() {
+        glm::vec3 G(0.f, -1.f, 0.f);
+        for(auto const & phy : phyobjs) {
+            phy->updateForce(G);
+        }
+    }
+
     // Calculation collision, update data in each phystate
     void collisionDetection() {
         for(auto const& phy1 : phyobjs) {
@@ -186,41 +204,39 @@ public:
                 // collision happen
                 // std::cout<< "collision happen!!!!!"<<std::endl;
                 // TODO go back some time to when collision happen
+                phy1->update(-1.f / 60.f);
+                phy2->update(-1.f / 60.f);
+
                 // TODO calculate intersection point
-                glm::vec3 c1 = phy1->bv->center;
-                glm::vec3 c2 = phy2->bv->center;
+
+                glm::vec3 p1, p2;
+                Collision::intersectPoint(phy1->bv, phy2->bv, p1, p2);
+                // calculate force
                 float m1 = phy1->bv->mass;
                 float m2 = phy2->bv->mass;
-
-                float r = 0.2;
-                const glm::vec3 p1 = c1 - r * glm::normalize(c1 - c2) ;
-                const glm::vec3 p2 = c2 + r * glm::normalize(c1 - c2) ;
-        
-                // calculate force
                 glm::vec3 n1, v1;
                 glm::vec3 n2, v2;
                 phy1->getVelocityAt(p1, n1, v1);
                 phy2->getVelocityAt(p2, n2, v2);
                 
-                if(glm::length(v1 - v2) < 0.1f) continue;
+                if(glm::length(v1 - v2) < 0.001f) continue;
 
                 glm::vec3 Vrel1 = glm::dot(v1 - v2, n1) * n1;
                 glm::vec3 Vrel2 = glm::dot(v2 - v1, n2) * n2;
                 // std::cout<<glm::to_string(dir1)<<" "<<glm::to_string(dir2)<<std::endl;
 
-                glm::vec3 F1 = (-2.f / (1.f/m1 + 1.f/m2) ) * Vrel1;
-                glm::vec3 F2 = (-2.f / (1.f/m1 + 1.f/m2) ) * Vrel2;
+                glm::vec3 F1 = (-100.f / (1.f/m1 + 1.f/m2) ) * Vrel1;
+                glm::vec3 F2 = (-100.f / (1.f/m1 + 1.f/m2) ) * Vrel2;
 
-                
             
-                glm::vec3 dir1 = glm::normalize(v1);
-                glm::vec3 dir2 = glm::normalize(v2);
-                F1 -=  glm::length(F1) * dir1;
-                F2 -=  glm::length(F2) * dir2;
-                
-            
+                glm::vec3 dir = glm::normalize(v1 - v2);
+                //F1 +=  glm::length(F1) * dir;
+                //F2 +=  glm::length(F2) * dir;
+
                 phy1->updateForce(p1, F1);
                 phy2->updateForce(p2, F2);
+                phy1->update(1.f / 60.f);
+                phy2->update(1.f / 60.f);
             }
         }
     }

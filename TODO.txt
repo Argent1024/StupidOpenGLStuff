@@ -1,19 +1,33 @@
+/*RENDERING*/
 Add texture ✔️
 Draw balls ✔️
 
+/*PHYSICS*/
+Add Physics rigid body
+	sphere bv ✔️
+	plane bv ✔️
+	    plane's inv
+	box bv
+	bv tree	
+
+Refactor & fix code in physic.h & bvh.h
+	add friction for some bv
+	modify dynamic type	
+
+Add Physics particles
+Use bvh for storing objs
+
+/*LIGHTING*/
 Add light
 Add/modify diffuse phong shader
+Add glass?
 
-BVH
-Add Physics 
-	particles 
-	rigid body
-
-Load meshes
-
+/*UTILIES*/
 Add Camera ✔️
+Load meshes
+Load scenes
+Save render result to video file
 Keyboard & Mouse input
 
-Save render result to video file
 
-Add glass?
+

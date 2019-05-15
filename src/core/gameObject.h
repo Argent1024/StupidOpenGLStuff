@@ -78,7 +78,7 @@ public:
     }
 
     void update() {
-        this->physic->update();
+        this->physic->update(1.0 / 30.0);
     }
     
     void render() {
