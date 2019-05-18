@@ -3,14 +3,18 @@ add_subdirectory (lib)
 include_directories(
 	lib/glfw-3.1.2/include/
 	lib/glm-0.9.7.1/
-    lib/glew-2.1.0/include/
-    core/
+	lib/glew-2.1.0/include/
+	
+	core/
+	physic/
     ./
 )
 
 file( GLOB GAME_SRC
-    "core/*.hpp"
-    "core/*.cpp"
+    "core/*.h"
+	"core/*.cpp"
+	"physic/*.h"
+	"physic/physhape.cpp"
 )
 
 

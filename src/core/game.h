@@ -16,13 +16,13 @@ private:
     vector<GameObj*> objs;
 
     GameObject* createObj(const string& shaderName, const string& shapeName,
-                   shared_ptr<BoundingVolume> bv,
+                   shared_ptr<PhyShape> physhape,
                    glm::mat3 rotation,
                    glm::vec3 transation,
                    const string& texname,
                    const PhysicType type) 
     {
-        GameObject* testObj = new GameObject(shaderName, shapeName, bv, 
+        GameObject* testObj = new GameObject(shaderName, shapeName, physhape, 
                                               rotation, transation, texname, type);
         this->objs.push_back(testObj);
         return testObj;

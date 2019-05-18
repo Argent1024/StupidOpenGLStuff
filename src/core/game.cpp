@@ -91,7 +91,7 @@ int Game::load() {
     glm::vec3 v(0.f, 0.f, 1.f);
     glm::vec3 c0(0.f, -0.5f, 0.f);
 
-    shared_ptr<BoundingVolume> groundbv = make_shared<Plane>(1.0, c0, u, v, 10.f, 10.f);
+    shared_ptr<PhyShape> groundbv = make_shared<PhyPlane>(1.0, c0, u, v, 10.f, 10.f);
     GameShapeManger.load("Ground", vertices, indices);
     GameObj* obj0 = createObj(shadername,"Ground", groundbv, R, c0, wall, NOPHYSIC);
 
@@ -111,22 +111,27 @@ int Game::load() {
     BallHelper::initVertices(40, 0.2f, b_vertex, b_indices);
     GameShapeManger.load(shapename, b_vertex, b_indices);
 
-    glm::vec3 c1(-1.f, 1.f, 0.f);
-    glm::vec3 c2(0.f, 0.f, 0.f);
+    glm::vec3 c1(-1.f, -0.3f, 0.f);
+    glm::vec3 c2(-1.f, 0.0f, 0.4f);
     glm::vec3 c3(1.f, 1.f, -0.15f);
-    vector<glm::vec3> ballpos = {c1, c2, c3};
+    glm::vec3 c4(0.f, 0.5f, 0.f);
+    glm::vec3 c5(0.f, 0.5f, 1.f);
+    glm::vec3 c6(0.7f, 0.5f, 1.f);
+    vector<glm::vec3> ballpos = {c1, c2, c3, c4, c5, c6};
     vector<GameObj*> objlist;
-    for(int i = 1; i <= 3; i++) {
+    for(int i = 1; i <= 1; i++) {
         glm::vec3 p = ballpos[i-1];
         string ballname = "Ball" + to_string(i) + ".jpg";
         GameTexManger.load(ballname, texp + ballname);
-        shared_ptr<BoundingVolume> bv = make_shared<Sphere>(0.2, p);
-        GameObj* obj = createObj(shadername, shapename, bv, R, p, ballname, RIGIDBODY);
+        shared_ptr<PhySphere> bv = make_shared<PhySphere>(0.2f, 1.f, p);
+        GameObj* obj = createObj(shadername, shapename, bv, R, p, "Wall", RIGIDBODY);
         objlist.push_back(obj);
     }
-    objlist[0]->applyForce(glm::vec3(-1.2f, 1.f, 0.0f), glm::vec3(5.f, 0.f, 0.f));
-    objlist[2]->applyForce(glm::vec3(1.2f, 1.f, -0.15f), glm::vec3(-5.f, 0.f, 1.f));
+    objlist[0]->applyForce(glm::vec3(-1.2f, -0.3f, 0.0f), glm::vec3(0.f, 5.f, 0.f));
+    //objlist[1]->applyForce(glm::vec3(-1.2f, -0.0f, 0.4f), glm::vec3(5.f, 0.0f, 0.f));
+    //objlist[2]->applyForce(glm::vec3(1.2f, 1.f, -0.15f), glm::vec3(-5.f, 0.f, 1.f));
 
+    // objlist[5]->applyForce(glm::vec3(0.7f, 0.5, 1.2f), glm::vec3(0.f, 0.f, -5.f));
     return 0;
 }
 

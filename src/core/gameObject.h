@@ -10,7 +10,7 @@
 
 
 #include "loader.h"
-#include "physic.h"
+#include "phyworld.h"
 #include "shape.h"
 
 using namespace std;
@@ -38,16 +38,16 @@ private:
 
 public:
     GameObject(const string& shaderName, const string& shapeName,
-               shared_ptr<BoundingVolume> bv,
+               shared_ptr<PhyShape> physhape,
                const string& textureName="",
                const PhysicType type=NOPHYSIC) : GameObj(shaderName, shapeName)
     {
         this->texture = GameTexManger.get(textureName);
         std::cout<<"using texuture "<<this->texture<<std::endl;
         if(type == NOPHYSIC) {
-            this->physic = make_shared<NoPhysic>(bv);
+            this->physic = make_shared<NoPhysic>(physhape);
         } else if(type == RIGIDBODY) {
-            this->physic = make_shared<RigidBody>(bv);
+            this->physic = make_shared<RigidBody>(physhape);
         } else {
             throw std::invalid_argument( "wrong physic type" );
         }
@@ -55,7 +55,7 @@ public:
     }
 
     GameObject(const string& shaderName, const string& shapeName,
-               shared_ptr<BoundingVolume> bv,
+               shared_ptr<PhyShape> physhape,
                glm::mat3 rotation,
                glm::vec3 transation,
                const string& textureName="",
@@ -64,9 +64,9 @@ public:
         this->texture = GameTexManger.get(textureName);
         std::cout<<"using texuture "<<this->texture<<std::endl;
         if(type == NOPHYSIC) {
-            this->physic = make_shared<NoPhysic>(bv, rotation, transation);
+            this->physic = make_shared<NoPhysic>(physhape, rotation, transation);
         } else if(type == RIGIDBODY) {
-            this->physic = make_shared<RigidBody>(bv, rotation, transation);
+            this->physic = make_shared<RigidBody>(physhape, rotation, transation);
         } else {
             throw std::invalid_argument( "wrong physic type" );
         }
