@@ -13,18 +13,18 @@ class PhySphere: public PhyShape {
 public:
     float radius;
     float deformat;
-    PhySphere(float r, float mas, glm::vec3 c): PhyShape(mass, c), radius(r), deformat(0.01f * r) {}
+    PhySphere(float r, float mass, glm::vec3 c): PhyShape(mass, c), radius(r), deformat(0.01f * r) {}
 
     void AssertPoint(const glm::vec3& p) {
-        assert(std::abs(glm::length(p - center)) <= 0.01f);
+        assert(std::abs(glm::length(p - center) - radius) <= 0.1f);
     }
 
     glm::mat3 getIbody() {
-        return glm::mat3(5.0f / (2.0f * mass * radius * radius));
+        return glm::mat3((2.0f * mass * radius * radius) / 5.0f);
     }
 
     glm::mat3 getIbodyInv() {
-        return glm::mat3((2.0f * mass * radius * radius) / 5.0f);
+		return glm::mat3(5.0f / (2.0f * mass * radius * radius));
     }
 };
 

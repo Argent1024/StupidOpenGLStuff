@@ -47,8 +47,9 @@ public:
                 glm::vec3 Vrel1 = glm::dot(p1.v - p2.v, p1.n) * p1.n;
                 glm::vec3 Vrel2 = glm::dot(p2.v - p1.v, p2.n) * p2.n;
                 
-                glm::vec3 F1 = (-80.f / (1.f/m1 + 1.f/m2) ) * Vrel1;
-                glm::vec3 F2 = (-80.f / (1.f/m1 + 1.f/m2) ) * Vrel2;
+                float c = (-80.f / (1.f/m1 + 1.f/m2));
+                glm::vec3 F1 = c * Vrel1;
+                glm::vec3 F2 = c * Vrel2;
 
                 phy1->updateForce(p1.p, F1);
                 phy2->updateForce(p2.p, F2);

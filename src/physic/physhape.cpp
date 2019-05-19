@@ -15,7 +15,7 @@ void Collision::intersectP(std::shared_ptr<PhyShape>& s1,  std::shared_ptr<PhySh
         if(sphere1 && plane2) {
             return Collision::intersectP(sphere1, plane2,phy1, phy2, p1, p2);
         } else if(sphere2 && plane1) {
-            return Collision::intersectP(sphere2, plane1,phy1, phy2, p1, p2);
+            return Collision::intersectP(sphere2, plane1, phy2, phy1, p2, p1);
         }
     }
 	std::cout<<"ERROR in type"<<std::endl;
@@ -35,16 +35,19 @@ void Collision::intersectP(std::shared_ptr<PhySphere>& s1, std::shared_ptr<PhySp
     p2.n = ndir;
 
     glm::vec3 vrel = p1.v - p2.v; 
-    // move contact point a little bit to simulate deformation
-    if(std::abs(glm::dot(vrel, ndir)) >= 0.01f) {
+    float vnormal = glm::dot(vrel, ndir);
+    if(std::abs(vnormal) >= 0.01f) {
         // Recalculate contact point and velocity but don't calculate normal again
-        glm::vec3 vdir = glm::normalize(vrel);
-        glm::vec3 pdir1 = glm::normalize(s1->center - vdir);
-        glm::vec3 pdir2 = glm::normalize(s2->center + vdir);
-        p1.p = s1->center - s1->radius * pdir1;
-        p2.p = s2->center - s2->radius * pdir2;
-        phy1->getVelocityAt(p1.p, p1.v);
-        phy2->getVelocityAt(p2.p, p2.v);
+        glm::vec3 dirv = vrel - vnormal * ndir;
+        float vdir = glm::length(dirv);
+        if(vdir <= 1.f && vdir >=0.01f) {
+            glm::vec3 pdir1 = glm::normalize(s1->center - (p1.p - 0.01f / vdir * dirv));
+            glm::vec3 pdir2 = glm::normalize(s2->center + (p2.p - 0.01f / vdir * dirv));
+            p1.p = s1->center - s1->radius * pdir1;
+            p2.p = s2->center - s2->radius * pdir2;
+            phy1->getVelocityAt(p1.p, p1.v);
+            phy2->getVelocityAt(p2.p, p2.v);
+        }
     }
 }
 
@@ -62,17 +65,26 @@ void Collision::intersectP(std::shared_ptr<PhySphere>& sphere, std::shared_ptr<P
     p2.p = plane->center + x * plane->u + y * plane->v;
     glm::vec3 dir = glm::normalize(sphere->center - p2.p);
 	p1.p = sphere->center - sphere->radius * dir;
+
+    p2.n = plane->n;
+    p1.n = -plane->n;
     phy1->getVelocityAt(p1.p, p1.v);
     phy2->getVelocityAt(p2.p, p2.v);
 
     glm::vec3 vrel = p1.v - p2.v; 
     // move contact point a little bit to simulate deformation
-    if(std::abs(glm::dot(vrel, dir)) >= 0.01f) {
+    float vnormal = glm::dot(vrel, dir);
+    if(std::abs(vnormal) >= 0.01f) {
         // Recalculate contact point and velocity but don't calculate normal again
-        glm::vec3 vdir = glm::normalize(vrel);
-        glm::vec3 pdir1 = glm::normalize(sphere->center - vdir);
-        p1.p = sphere->center - sphere->radius * pdir1;
-        phy1->getVelocityAt(p1.p, p1.v);
+        glm::vec3 dirv = vrel - vnormal * dir;
+        float vdir = glm::length(dirv);
+        //TODO
+        if(vdir <= 1.f && vdir >=0.01f) {
+            // new point locate at p - vdir
+            glm::vec3 pdir1 = glm::normalize(sphere->center - (p1.p - 0.01f / vdir * dirv));
+            p1.p = sphere->center - sphere->radius * pdir1;
+            phy1->getVelocityAt(p1.p, p1.v);
+        }
     }
 }
 

@@ -21,6 +21,9 @@ enum PhysicType {
 const float DT = 1 / 30.f;
 
 
+void reorthogonalization(glm::mat3& m);
+
+
 class PhyShape {
 public:
     const float mass;
@@ -126,7 +129,7 @@ private:
     void updateRotation(float dt) {
         if(glm::length(angular) <= 0.001f) {
             return;
-        }
+        }   
         float x = angular.x;
         float y = angular.y;
         float z = angular.z;
@@ -137,10 +140,7 @@ private:
         glm::mat3 dR =  crossw * rotation;
         rotation += dt * dR;
         //std::cout<<glm::determinant(rotation)<<std::endl;
-        //TODO avoid numerical error
-        rotation[0] = glm::normalize(rotation[0]);
-        rotation[1] = glm::normalize(rotation[1]);
-        rotation[2] = glm::normalize(rotation[2]);
+        reorthogonalization(rotation);
     }
 
     void updateTransition(float dt) {
@@ -179,7 +179,7 @@ public:
 
         //update mometum
         P += DT * Fv; 
-        L += DT * Torque;
+        L -= DT * Torque;
         //update velocity & angular
         velocity = P / mass;
         glm::mat3 Iinv = rotation * physhape->getIbodyInv() * glm::transpose(rotation);
