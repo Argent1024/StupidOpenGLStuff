@@ -180,6 +180,7 @@ public:
 	bool load(const string& name, vector<Vertex>& vertices, vector<unsigned int>& indices) {
 		assert(shapes.find(name) == shapes.end());
 		shapes[name] = make_shared<TriMesh>(vertices, indices);
+		return true;
 	}
 
 };

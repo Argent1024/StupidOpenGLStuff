@@ -76,8 +76,8 @@ int Game::load() {
         1, 2, 3,
     };
     
-    string path = "/home/argent/work/game/src/";
-	//string path = "D:/work/game/src/";
+    //string path = "/home/argent/work/game/src/";
+	string path = "D:/work/game/src/";
     string vp =  path +"shaders/testvertex.glsl";
     string fp =  path +"shaders/testfragment.glsl";
     string shadername = "testshader";
