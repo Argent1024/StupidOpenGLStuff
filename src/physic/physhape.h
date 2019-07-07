@@ -79,7 +79,7 @@ public:
 
 class Collision {
 public:
-	static bool intersect(std::shared_ptr< PhyShape>& s1, std::shared_ptr< PhyShape>& s2) {
+	static bool intersect(std::shared_ptr<PhyShape>& s1, std::shared_ptr<PhyShape>& s2) {
 		//std::cout<<"ERROR calling this function"<<std::endl;
 		//TODO modify this procedure
 		std::shared_ptr<PhySphere> sphere1 = std::dynamic_pointer_cast<PhySphere>(s1);

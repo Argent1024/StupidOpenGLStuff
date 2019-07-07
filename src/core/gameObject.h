@@ -26,9 +26,13 @@ public:
         this->shape = GameShapeManger.get(shapeName);   
     }
     
+	GameObj(const string& shaderName, const std::shared_ptr<Shape> s) {
+		this->shape = s;
+		this->shader = GameShaderManger.get(shaderName);
+	}
+
     virtual void applyForce(const glm::vec3& p, const glm::vec3& F) = 0;
     virtual void render() = 0;
-    virtual void update() = 0;
 };
 
 class GameObject: public GameObj {
@@ -48,7 +52,7 @@ public:
             this->physic = make_shared<NoPhysic>(physhape);
         } else if(type == RIGIDBODY) {
             this->physic = make_shared<RigidBody>(physhape);
-        } else {
+		} else {
             throw std::invalid_argument( "wrong physic type" );
         }
         GamePhysic.push_back(this->physic);
@@ -72,15 +76,11 @@ public:
         }
         GamePhysic.push_back(this->physic);
     }
-
-    void applyForce(const glm::vec3& p, const glm::vec3& F) {
-        this->physic->updateForce(p, F);
-    }
-
-    void update() {
-        this->physic->update(1.0 / 30.0);
-    }
     
+	void applyForce(const glm::vec3& p, const glm::vec3& F) {
+		this->physic->updateForce(p, F);
+	}
+
     void render() {
         //TODO avoid hard code?
         GameCamera.setShader(this->shader);
@@ -89,4 +89,26 @@ public:
     }
 };
 
+
+class PraticleObject : public GameObj {
+private:
+	std::shared_ptr<PraticleSystem> praticlesys;
+	unsigned int texture;
+public:
+	PraticleObject(const string& shaderName, std::shared_ptr<Shape> p_shape, const string& textureName = "" )
+		:GameObj(shaderName, p_shape) {
+		this->texture = GameTexManger.get(textureName);
+	}
+	
+	void applyForce(const glm::vec3& p, const glm::vec3& F) {
+		std::cout << "Calling applyForce on praticle system" << std::endl;
+		return;
+	}
+
+	void render() {
+		GameCamera.setShader(this->shader);
+		this->shape->render(this->shader, this->texture);
+	}
+
+};
 #endif

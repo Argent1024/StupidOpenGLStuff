@@ -53,9 +53,13 @@ public:
         center = transition;
     }
 
+	void update(glm::vec3 transition) {
+		center = transition;
+	}
+
 };
 
-
+//TODO move rotation outside this class
 class PhysicState {
 public:
 	// The transform

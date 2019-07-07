@@ -5,12 +5,14 @@ include_directories(
 	lib/glm-0.9.7.1/
 	lib/glew-2.1.0/include/
 	
+	utils/
 	core/
 	physic/
     ./
 )
 
 file( GLOB GAME_SRC
+	"utils/*>h"
     "core/*.h"
 	"core/*.cpp"
 	"physic/*.h"

@@ -19,7 +19,7 @@ using namespace std;
 class Shape {
 
 public:
-	virtual void render(const shared_ptr<Shader> shader, const int& texture) = 0;
+	virtual void render(shared_ptr<Shader>& shader, unsigned int& texture) = 0;
 };
 
 struct Vertex {
@@ -47,7 +47,7 @@ public:
 		init();
 	}
 
-	void render(const shared_ptr<Shader> shader, const int& texture) {
+	void render(shared_ptr<Shader>& shader, unsigned int& texture) {
 		shader->use();
 		if(texture) {
 			glBindTexture(GL_TEXTURE_2D, texture);
