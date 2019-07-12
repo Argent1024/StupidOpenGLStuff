@@ -6,7 +6,6 @@
 #include <string>
 #include <map>
 #include <vector>   
-using namespace std;
 
 #include "oglutil/shader.h"
 #include "oglutil/texture.h"

@@ -12,17 +12,15 @@
 
 #include "stb_image.h"
 
-using namespace std;
-
 class TextureManager {
 private:
-    map<string, unsigned int> m;
+	std::map<std::string, unsigned int> m;
 
-    unsigned int loadtexture(const string& filepath) {
+    unsigned int loadtexture(const std::string& filepath) {
         int width, height, nrChannels;
         unsigned char *data = stbi_load(filepath.c_str(), &width, &height, &nrChannels, 0); 
         if( !data ) {
-            cout<<"Failed to load texture"<<endl;
+			std::cout<<"Failed to load texture"<< std::endl;
         }
         unsigned int texture;
         glGenTextures(1, &texture);
@@ -38,17 +36,17 @@ private:
     }
 
 public:
-    int load(const string& name, const string& file) {
+    int load(const std::string& name, const std::string& file) {
         if(m.find(name) != m.end()) {
             return 0;
         } else {
-            cout<<"loading texture "<<name<<" "<<file<<endl;
+			std::cout<<"loading texture "<<name<<" "<<file<< std::endl;
             m[name] = loadtexture(file);
             return 0;
         }
     }
 
-    unsigned int get(const string& name) {
+    unsigned int get(const std::string& name) {
         assert(m.find(name) != m.end());
         return m[name];
     }

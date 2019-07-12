@@ -12,13 +12,13 @@
 class Game {
 private:
     GLFWwindow* window;
-    vector<GameObj*> objs;
+	std::vector<GameObj*> objs;
 
-    GameObject* createObj(const string& shaderName, const string& shapeName,
-                   shared_ptr<PhyShape> physhape,
+    GameObject* createObj(const std::string& shaderName, const std::string& shapeName,
+				   std::shared_ptr<PhyShape> physhape,
                    glm::mat3 rotation,
                    glm::vec3 transation,
-                   const string& texname,
+                   const std::string& texname,
                    const PhysicType type) 
     {
         GameObject* testObj = new GameObject(shaderName, shapeName, physhape, 
@@ -27,7 +27,7 @@ private:
         return testObj;
     }
 
-	GameObj* createPraticleSys(const string& shaderName, const string& texname) {
+	GameObj* createPraticleSys(const std::string& shaderName, const std::string& texname) {
 		// num of praticles
 		int n = 10;
 		float mass = 1.f;
@@ -38,14 +38,14 @@ private:
 		glm::vec3 z(0.f, 0.f, 1.f);
 
 		BoxBV bv(c, x, y, z, 1.f, 1.f, 1.f);
-		std::shared_ptr<PraticleSystem> praticlesys = make_shared<PraticleSystem>();
+		std::shared_ptr<PraticleSystem> praticlesys = std::make_shared<PraticleSystem>();
 		praticlesys->init(n, mass, bv, praticlesys);
 
 		int sample = 5;
 		std::vector<Vertex> vertices;
-		vector<unsigned int> indices;
+		std::vector<unsigned int> indices;
 		BallHelper::initVertices(sample, praticlesys->r, vertices, indices);
-		std::shared_ptr<Shape> p_shape = make_shared<PraticleShape>(praticlesys, vertices, indices);
+		std::shared_ptr<Shape> p_shape = std::make_shared<PraticleShape>(praticlesys, vertices, indices);
 
 		GamePhysic.addParticleSystem(praticlesys);
 		PraticleObject* obj = new PraticleObject(shaderName, p_shape, texname);

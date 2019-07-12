@@ -10,7 +10,7 @@
 // Class for storing gameobj
 class Scene {
 private:
-	std::vector<shared_ptr<GameObj>> objects;
+	std::vector<std::shared_ptr<GameObj>> objects;
 public:
 	void render() {
 		for (auto const & obj : objects) {
@@ -19,13 +19,13 @@ public:
 	}
 
 	/*	TODO */
-	shared_ptr<GameObj> createObj(const string& shaderName, const string& shapeName,
-		shared_ptr<PhyShape> physhape,
+	std::shared_ptr<GameObj> createObj(const std::string& shaderName, const std::string& shapeName,
+		std::shared_ptr<PhyShape> physhape,
 		glm::mat3 rotation,
 		glm::vec3 transation,
-		const string& texname,
+		const std::string& texname,
 		const PhysicType type) {
-		std::shared_ptr<GameObj> testObj = make_shared<GameObject>(shaderName, shapeName, physhape,
+		std::shared_ptr<GameObj> testObj = std::make_shared<GameObject>(shaderName, shapeName, physhape,
 			rotation, transation, texname, type);
 		objects.push_back(testObj);
 		return testObj;

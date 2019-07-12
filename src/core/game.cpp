@@ -34,44 +34,44 @@ void Game::test_scene() {
 		glm::vec2(0.0f, 1.0f)
 	);
 
-	vector<Vertex> vertices = { a, b, c, d };
-	vector<unsigned int> indices = {
+	std::vector<Vertex> vertices = { a, b, c, d };
+	std::vector<unsigned int> indices = {
 		0, 1, 3,
 		1, 2, 3,
 	};
 
 	//string path = "/home/argent/work/game/src/";
-	string path = "D:/work/game/src/";
-	string vp = path + "shaders/testvertex.glsl";
-	string fp = path + "shaders/testfragment.glsl";
-	string shadername = "testshader";
+	std::string path = "D:/work/game/src/";
+	std::string vp = path + "shaders/testvertex.glsl";
+	std::string fp = path + "shaders/testfragment.glsl";
+	std::string shadername = "testshader";
 	GameShaderManger.load(shadername, vp, fp);
 
 	/*Ground*/
-	string wall = "Wall";
-	string walltexp = path + "textures/2k_earth_daymap.jpg";
+	std::string wall = "Wall";
+	std::string walltexp = path + "textures/2k_earth_daymap.jpg";
 	GameTexManger.load(wall, walltexp);
 	glm::vec3 u(1.f, 0.f, 0.f);
 	glm::vec3 v(0.f, 0.f, 1.f);
 	glm::vec3 c0(0.f, -0.5f, 0.f);
 
-	shared_ptr<PhyShape> groundbv = make_shared<PhyPlane>(1.0, c0, u, v, 10.f, 10.f);
+	std::shared_ptr<PhyShape> groundbv = std::make_shared<PhyPlane>(1.0, c0, u, v, 10.f, 10.f);
 	GameShapeManger.load("Ground", vertices, indices);
 	GameObj* obj0 = createObj(shadername, "Ground", groundbv, R, c0, wall, NOPHYSIC);
 
-	string texp = path + "textures/PoolBallSkins/";
-	string ball1 = "Ball1.jpg";
+	std::string texp = path + "textures/PoolBallSkins/";
+	std::string ball1 = "Ball1.jpg";
 	GameTexManger.load(ball1, texp + ball1);
 
-	string ball2 = "Ball2.jpg";
+	std::string ball2 = "Ball2.jpg";
 	GameTexManger.load(ball2, texp + ball2);
 
-	string ball3 = "Ball3.jpg";
+	std::string ball3 = "Ball3.jpg";
 	GameTexManger.load(ball3, texp + ball3);
 
-	string shapename = "testMesh";
-	vector<Vertex> b_vertex;
-	vector<unsigned int> b_indices;
+	std::string shapename = "testMesh";
+	std::vector<Vertex> b_vertex;
+	std::vector<unsigned int> b_indices;
 	BallHelper::initVertices(40, 0.2f, b_vertex, b_indices);
 	GameShapeManger.load(shapename, b_vertex, b_indices);
 
@@ -81,13 +81,13 @@ void Game::test_scene() {
 	glm::vec3 c4(0.f, 0.5f, 0.f);
 	glm::vec3 c5(0.f, 0.5f, 1.f);
 	glm::vec3 c6(0.7f, 0.5f, 1.f);
-	vector<glm::vec3> ballpos = { c1, c2, c3, c4, c5, c6 };
-	vector<GameObj*> objlist;
+	std::vector<glm::vec3> ballpos = { c1, c2, c3, c4, c5, c6 };
+	std::vector<GameObj*> objlist;
 	for (int i = 1; i <= 6; i++) {
 		glm::vec3 p = ballpos[i - 1];
-		string ballname = "Ball" + to_string(i) + ".jpg";
+		std::string ballname = "Ball" + std::to_string(i) + ".jpg";
 		GameTexManger.load(ballname, texp + ballname);
-		shared_ptr<PhySphere> bv = make_shared<PhySphere>(0.2f, 1.f, p);
+		std::shared_ptr<PhySphere> bv = std::make_shared<PhySphere>(0.2f, 1.f, p);
 		GameObj* obj = createObj(shadername, shapename, bv, R, p, ballname, RIGIDBODY);
 		objlist.push_back(obj);
 	}
@@ -123,34 +123,34 @@ void Game::test_praticle() {
 		glm::vec2(0.0f, 1.0f)
 	);
 
-	vector<Vertex> vertices = { a, b, c, d };
-	vector<unsigned int> indices = {
+	std::vector<Vertex> vertices = { a, b, c, d };
+	std::vector<unsigned int> indices = {
 		0, 1, 3,
 		1, 2, 3,
 	};
 
 	//string path = "/home/argent/work/game/src/";
-	string path = "D:/work/game/src/";
-	string vp = path + "shaders/testvertex.glsl";
-	string fp = path + "shaders/testfragment.glsl";
-	string shadername = "testshader";
+	std::string path = "D:/work/game/src/";
+	std::string vp = path + "shaders/testvertex.glsl";
+	std::string fp = path + "shaders/testfragment.glsl";
+	std::string shadername = "testshader";
 	GameShaderManger.load(shadername, vp, fp);
 
 	/*Ground*/
-	string wall = "Wall";
-	string walltexp = path + "textures/2k_earth_daymap.jpg";
+	std::string wall = "Wall";
+	std::string walltexp = path + "textures/2k_earth_daymap.jpg";
 	GameTexManger.load(wall, walltexp);
 	glm::vec3 u(1.f, 0.f, 0.f);
 	glm::vec3 v(0.f, 0.f, 1.f);
 	glm::vec3 c0(0.f, -0.5f, 0.f);
 
-	shared_ptr<PhyShape> groundbv = make_shared<PhyPlane>(1.0, c0, u, v, 10.f, 10.f);
+	std::shared_ptr<PhyShape> groundbv = std::make_shared<PhyPlane>(1.0, c0, u, v, 10.f, 10.f);
 	GameShapeManger.load("Ground", vertices, indices);
 	GameObj* obj0 = createObj(shadername, "Ground", groundbv, R, c0, wall, NOPHYSIC);
 	
 	/*praticle tex*/
-	string p_texpath = path + "textures/PoolBallSkins/Ball2.jpg";
-	string p_texname = "PraticeTEX";
+	std::string p_texpath = path + "textures/PoolBallSkins/Ball2.jpg";
+	std::string p_texname = "PraticeTEX";
 	GameTexManger.load(p_texname, p_texpath);
 	createPraticleSys(shadername, p_texname);
 }

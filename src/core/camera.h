@@ -34,7 +34,7 @@ public:
         projection = glm::perspective(glm::radians(45.0f), 1.f, 0.1f, 100.0f);
     }
     
-    void setShader(shared_ptr<Shader>& shader) {
+    void setShader(std::shared_ptr<Shader>& shader) {
         shader->setMat4("view", view);
         shader->setMat4("projection", projection);
     }

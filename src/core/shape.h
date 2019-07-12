@@ -12,14 +12,12 @@
 #include "loader.h"
 #include "physic.h"
 
-using namespace std;
-
 // TODO Mutiple instancing
 // Shape class 
 class Shape {
 
 public:
-	virtual void render(shared_ptr<Shader>& shader, unsigned int& texture) = 0;
+	virtual void render(std::shared_ptr<Shader>& shader, unsigned int& texture) = 0;
 };
 
 struct Vertex {
@@ -32,7 +30,7 @@ struct Vertex {
 
 class TriMesh : public Shape {
 public:
-	TriMesh(vector<Vertex>& vertices, vector<unsigned int>& indices)
+	TriMesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
 		:vertices(vertices), indices(indices)
 	{	
 		
@@ -47,7 +45,7 @@ public:
 		init();
 	}
 
-	void render(shared_ptr<Shader>& shader, unsigned int& texture) {
+	void render(std::shared_ptr<Shader>& shader, unsigned int& texture) {
 		shader->use();
 		if(texture) {
 			glBindTexture(GL_TEXTURE_2D, texture);
@@ -60,8 +58,8 @@ public:
 private:
 	unsigned int VAO;
     unsigned int VBO, EBO;
-	const vector<Vertex> vertices;
-	const vector<unsigned int> indices;
+	const std::vector<Vertex> vertices;
+	const std::vector<unsigned int> indices;
 
 	void init() {
 		glGenVertexArrays(1, &VAO);
@@ -103,7 +101,7 @@ public:
 		return tcount * sample + pcount;
 	}
 
-	static void initVertices(int sample, float r, vector<Vertex>& vertices, vector<unsigned int>& indices) {
+	static void initVertices(int sample, float r, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices) {
 		// Get sample * sample vertices
 		double twoPi = 2 * 3.1415926;
 		double Pi = 3.1415926;
@@ -170,16 +168,16 @@ public:
 
 class ShapeManager {
 public:
-	map<string, shared_ptr<Shape>> shapes;
+	std::map<std::string, std::shared_ptr<Shape>> shapes;
 	
-	shared_ptr<Shape> get(const string& name) {
+	std::shared_ptr<Shape> get(const std::string& name) {
 		assert(shapes.find(name) != shapes.end());
 		return shapes[name];
 	}
 		
-	bool load(const string& name, vector<Vertex>& vertices, vector<unsigned int>& indices) {
+	bool load(const std::string& name, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices) {
 		assert(shapes.find(name) == shapes.end());
-		shapes[name] = make_shared<TriMesh>(vertices, indices);
+		shapes[name] = std::make_shared<TriMesh>(vertices, indices);
 		return true;
 	}
 

@@ -13,20 +13,18 @@
 #include "phyworld.h"
 #include "shape.h"
 
-using namespace std;
-
 class GameObj {
 protected:
-    shared_ptr<Shader> shader; 
-    shared_ptr<Shape> shape;
+	std::shared_ptr<Shader> shader;
+	std::shared_ptr<Shape> shape;
 public:
-    GameObj(const string& shaderName, const string& shapeName) 
+    GameObj(const std::string& shaderName, const std::string& shapeName)
     {
         this->shader = GameShaderManger.get(shaderName);
         this->shape = GameShapeManger.get(shapeName);   
     }
     
-	GameObj(const string& shaderName, const std::shared_ptr<Shape> s) {
+	GameObj(const std::string& shaderName, const std::shared_ptr<Shape> s) {
 		this->shape = s;
 		this->shader = GameShaderManger.get(shaderName);
 	}
@@ -37,40 +35,40 @@ public:
 
 class GameObject: public GameObj {
 private:
-    shared_ptr<PhysicState> physic;
+	std::shared_ptr<PhysicState> physic;
     unsigned int texture;
 
 public:
-    GameObject(const string& shaderName, const string& shapeName,
-               shared_ptr<PhyShape> physhape,
-               const string& textureName="",
+    GameObject(const std::string& shaderName, const std::string& shapeName,
+				std::shared_ptr<PhyShape> physhape,
+               const std::string& textureName="",
                const PhysicType type=NOPHYSIC) : GameObj(shaderName, shapeName)
     {
         this->texture = GameTexManger.get(textureName);
         std::cout<<"using texuture "<<this->texture<<std::endl;
         if(type == NOPHYSIC) {
-            this->physic = make_shared<NoPhysic>(physhape);
+            this->physic = std::make_shared<NoPhysic>(physhape);
         } else if(type == RIGIDBODY) {
-            this->physic = make_shared<RigidBody>(physhape);
+            this->physic = std::make_shared<RigidBody>(physhape);
 		} else {
             throw std::invalid_argument( "wrong physic type" );
         }
         GamePhysic.push_back(this->physic);
     }
 
-    GameObject(const string& shaderName, const string& shapeName,
-               shared_ptr<PhyShape> physhape,
+    GameObject(const std::string& shaderName, const std::string& shapeName,
+			   std::shared_ptr<PhyShape> physhape,
                glm::mat3 rotation,
                glm::vec3 transation,
-               const string& textureName="",
+               const std::string& textureName="",
                const PhysicType type=NOPHYSIC) : GameObj(shaderName, shapeName)
     {
         this->texture = GameTexManger.get(textureName);
         std::cout<<"using texuture "<<this->texture<<std::endl;
         if(type == NOPHYSIC) {
-            this->physic = make_shared<NoPhysic>(physhape, rotation, transation);
+            this->physic = std::make_shared<NoPhysic>(physhape, rotation, transation);
         } else if(type == RIGIDBODY) {
-            this->physic = make_shared<RigidBody>(physhape, rotation, transation);
+            this->physic = std::make_shared<RigidBody>(physhape, rotation, transation);
         } else {
             throw std::invalid_argument( "wrong physic type" );
         }
@@ -95,7 +93,7 @@ private:
 	std::shared_ptr<PraticleSystem> praticlesys;
 	unsigned int texture;
 public:
-	PraticleObject(const string& shaderName, std::shared_ptr<Shape> p_shape, const string& textureName = "" )
+	PraticleObject(const std::string& shaderName, std::shared_ptr<Shape> p_shape, const std::string& textureName = "" )
 		:GameObj(shaderName, p_shape) {
 		this->texture = GameTexManger.get(textureName);
 	}

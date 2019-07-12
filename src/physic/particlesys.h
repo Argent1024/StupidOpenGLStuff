@@ -124,12 +124,12 @@ public:
 	TriMesh mesh;
 	std::shared_ptr<PraticleSystem> praticleSys;
 
-	PraticleShape(std::shared_ptr<PraticleSystem> praticleSys, std::vector<Vertex> vertices, vector<unsigned int> indices)
+	PraticleShape(std::shared_ptr<PraticleSystem> praticleSys, std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 		:mesh(vertices, indices), praticleSys(praticleSys){
 		//BallHelper::initVertices(10, radius, vertices, indices);
 	}
 
-	void render(shared_ptr<Shader>& shader, unsigned int& texture) {
+	void render(std::shared_ptr<Shader>& shader, unsigned int& texture) {
 		for (auto const & p : praticleSys->praticles) {
 			p->setShader(shader);
 			mesh.render(shader, texture);
