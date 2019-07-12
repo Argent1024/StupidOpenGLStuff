@@ -27,8 +27,8 @@ private:
         return testObj;
     }
 
-	GameObj* createPraticleSys(const std::string& shaderName, const std::string& texname) {
-		// num of praticles
+	GameObj* createParticleSys(const std::string& shaderName, const std::string& texname) {
+		// num of particles
 		int n = 10;
 		float mass = 1.f;
 
@@ -38,17 +38,17 @@ private:
 		glm::vec3 z(0.f, 0.f, 1.f);
 
 		BoxBV bv(c, x, y, z, 1.f, 1.f, 1.f);
-		std::shared_ptr<PraticleSystem> praticlesys = std::make_shared<PraticleSystem>();
-		praticlesys->init(n, mass, bv, praticlesys);
+		std::shared_ptr<ParticleSystem> particlesys = std::make_shared<ParticleSystem>();
+		particlesys->init(n, mass, bv, particlesys);
 
 		int sample = 5;
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
-		BallHelper::initVertices(sample, praticlesys->r, vertices, indices);
-		std::shared_ptr<Shape> p_shape = std::make_shared<PraticleShape>(praticlesys, vertices, indices);
+		BallHelper::initVertices(sample, particlesys->r, vertices, indices);
+		std::shared_ptr<Shape> p_shape = std::make_shared<ParticleShape>(particlesys, vertices, indices);
 
-		GamePhysic.addParticleSystem(praticlesys);
-		PraticleObject* obj = new PraticleObject(shaderName, p_shape, texname);
+		GamePhysic.addParticleSystem(particlesys);
+		ParticleObject* obj = new ParticleObject(shaderName, p_shape, texname);
 		this->objs.push_back(obj);
 		return obj;
 	}
@@ -59,7 +59,7 @@ public:
     
 	// Just a test method for now, going to delete
 	void test_scene();
-	void test_praticle();
+	void test_particle();
 
     int load();
 

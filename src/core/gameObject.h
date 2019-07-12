@@ -88,18 +88,18 @@ public:
 };
 
 
-class PraticleObject : public GameObj {
+class ParticleObject : public GameObj {
 private:
-	std::shared_ptr<PraticleSystem> praticlesys;
+	std::shared_ptr<ParticleSystem> particlesys;
 	unsigned int texture;
 public:
-	PraticleObject(const std::string& shaderName, std::shared_ptr<Shape> p_shape, const std::string& textureName = "" )
+	ParticleObject(const std::string& shaderName, std::shared_ptr<Shape> p_shape, const std::string& textureName = "" )
 		:GameObj(shaderName, p_shape) {
 		this->texture = GameTexManger.get(textureName);
 	}
 	
 	void applyForce(const glm::vec3& p, const glm::vec3& F) {
-		std::cout << "Calling applyForce on praticle system" << std::endl;
+		std::cout << "Calling applyForce on particle system" << std::endl;
 		return;
 	}
 

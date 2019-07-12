@@ -1,6 +1,6 @@
 #include "particlesys.h"
 
-namespace PraticleSystem {
+namespace ParticleSystem {
 	void update() {
 	
 	}

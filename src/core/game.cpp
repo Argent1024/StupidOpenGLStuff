@@ -97,7 +97,7 @@ void Game::test_scene() {
 	objlist[5]->applyForce(glm::vec3(0.7f, 0.5, 1.2f), glm::vec3(-0.f, 2.f, 1.f));
 }
 
-void Game::test_praticle() {
+void Game::test_particle() {
 	glm::mat3 R(1.f);
 	Vertex a(
 		glm::vec3(10.f, -0.5f, 10.f),
@@ -148,11 +148,11 @@ void Game::test_praticle() {
 	GameShapeManger.load("Ground", vertices, indices);
 	GameObj* obj0 = createObj(shadername, "Ground", groundbv, R, c0, wall, NOPHYSIC);
 	
-	/*praticle tex*/
+	/*particle tex*/
 	std::string p_texpath = path + "textures/PoolBallSkins/Ball2.jpg";
 	std::string p_texname = "PraticeTEX";
 	GameTexManger.load(p_texname, p_texpath);
-	createPraticleSys(shadername, p_texname);
+	createParticleSys(shadername, p_texname);
 }
 
 int Game::init() {
@@ -192,7 +192,7 @@ int Game::init() {
 }
 
 int Game::load() {
-	test_praticle();
+	test_particle();
 	return 0;
 }
 
