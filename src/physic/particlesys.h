@@ -2,6 +2,7 @@
 #define PARTICLESYS_H
 
 #include <vector>
+#include <cmath>
 
 #include <glm/glm.hpp>  
 #include <glm/ext.hpp>
@@ -105,16 +106,8 @@ public:
 		}
 	}
 
-	virtual void update() {
-		return;
-	}
+	virtual void update() { return; }
 	
-	//Smoothing kernels
-	virtual float Wpoly(float r, float h) {
-		return 0;
-	}
-
-
 };
 
 
