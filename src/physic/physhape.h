@@ -96,7 +96,7 @@ public:
                 return intersect(sphere2, plane1);
             }
         }
-		std::cout<<"ERROR in type"<<std::endl;
+		//std::cout<<"ERROR in type"<<std::endl;
 		return false;
 	}
 

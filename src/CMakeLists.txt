@@ -12,12 +12,14 @@ include_directories(
 )
 
 file( GLOB GAME_SRC
-	"utils/*>h"
+	"utils/*.h"
     "core/*.h"
 	"core/*.cpp"
 	"physic/*.h"
-	"physic/physhape.cpp"
-	"physic/physic.cpp"
+	"physic/*.cpp"
+	#"physic/particlesys.cpp"
+	#"physic/physhape.cpp"
+	#"physic/physic.cpp"
 )
 
 

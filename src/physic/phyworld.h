@@ -62,15 +62,20 @@ public:
                 const float m2 = phy2->physhape->mass;
 
                 
-                if(glm::length(p1.v - p2.v) < 0.001f) continue;
+				if (glm::length(p1.v - p2.v) < 0.01f) { 
+					phy1->update(1.f / 120.f);
+					phy2->update(1.f / 120.f);
+					continue; 
+				}
 
                 glm::vec3 Vrel1 = glm::dot(p1.v - p2.v, p1.n) * p1.n;
                 glm::vec3 Vrel2 = glm::dot(p2.v - p1.v, p2.n) * p2.n;
                 
 
 				// TODO modify constant 
-                float c = (-50.f / (1.f/m1 + 1.f/m2));
-                glm::vec3 F1 = c * Vrel1;
+                float c = (-62.5f / (1.f/m1 + 1.f/m2));
+                
+				glm::vec3 F1 = c * Vrel1;
                 glm::vec3 F2 = c * Vrel2;
 
                 phy1->updateForce(p1.p, F1);

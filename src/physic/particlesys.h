@@ -23,16 +23,13 @@ class ParticleState: public PhysicState{
 	State for one particle
 	physhape points to the shape of this particle, e.x. sphere
 */
-private:
+public:
+	float pressure;
+	float density;
 	glm::vec3 velocity;
 
-protected:
-	float density;
-	glm::vec3 pressure;
-
-public:
 	ParticleState(glm::vec3 transition, std::shared_ptr<PhyShape> physhape, 
-				  float density, glm::vec3 pressure) 
+				  float density, float pressure) 
 		: PhysicState(glm::mat3(1.f), transition, physhape), 
 		  density(density) , pressure(pressure) {}
 
@@ -85,13 +82,13 @@ public:
 		float volume = bv.volume();
 		assert(volume > 0 && mass > 0 && n > 0);
 
-		float radius = bv.lenx / n / 2.f;
+		float radius = bv.lenx / float(n) * 0.5f;
 		this->r = radius;
 
 		float m_particle = mass / volume;
 
 		float density = m_particle / (4.f / 3.f * 3.14f * powf(radius, 3));
-		glm::vec3 pressure(0.f);
+		float pressure = 1.f;
 
 		const glm::vec3 start = bv.center - bv.x * bv.lenx - bv.y * bv.leny - bv.z * bv.lenz;
 		const float len = bv.lenx;
@@ -106,7 +103,9 @@ public:
 		}
 	}
 
-	virtual void update() { return; }
+	virtual void updatePressureDensity();
+
+	virtual void update();
 	
 };
 

@@ -142,9 +142,33 @@ void Game::test_particle() {
 	GameTexManger.load(wall, walltexp);
 	glm::vec3 u(1.f, 0.f, 0.f);
 	glm::vec3 v(0.f, 0.f, 1.f);
-	glm::vec3 c0(0.f, -0.5f, 0.f);
+	glm::vec3 w(0.f, 1.f, 0.f);
 
+	glm::vec3 c0(0.f, -0.5f, 0.f);
 	std::shared_ptr<PhyShape> groundbv = std::make_shared<PhyPlane>(1.0, c0, u, v, 10.f, 10.f);
+	
+
+	glm::vec3 cleft(-2.f, 0.f, 0.f);
+	std::shared_ptr<PhyShape> leftWall = std::make_shared<PhyPlane>(1.0, cleft, w, v, 10.f, 10.f);
+	std::shared_ptr<PhysicState> lphy = std::make_shared<NoPhysic>(leftWall);
+
+	glm::vec3 cright(2.f, 0.f, 0.f);
+	std::shared_ptr<PhyShape> rightWall = std::make_shared<PhyPlane>(1.0, cright, w, v, 10.f, 10.f);
+	std::shared_ptr<PhysicState> rphy = std::make_shared<NoPhysic>(rightWall);
+
+	glm::vec3 cfront(0.f, 0.f, 2.f);
+	std::shared_ptr<PhyShape> frontWall = std::make_shared<PhyPlane>(1.0, cfront, u, w, 10.f, 10.f);
+	std::shared_ptr<PhysicState> fphy = std::make_shared<NoPhysic>(frontWall);
+
+	glm::vec3 cback(0.f, 0.f, -2.f);
+	std::shared_ptr<PhyShape> backWall = std::make_shared<PhyPlane>(1.0, cback, u, w, 10.f, 10.f);
+	std::shared_ptr<PhysicState> bphy = std::make_shared<NoPhysic>(backWall);
+
+	GamePhysic.push_back(lphy);
+	GamePhysic.push_back(rphy);
+	GamePhysic.push_back(fphy);
+	GamePhysic.push_back(bphy);
+
 	GameShapeManger.load("Ground", vertices, indices);
 	GameObj* obj0 = createObj(shadername, "Ground", groundbv, R, c0, wall, NOPHYSIC);
 	

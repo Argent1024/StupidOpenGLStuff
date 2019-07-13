@@ -9,7 +9,6 @@
 
 #include "assert.h"
 
-#include "loader.h"
 #include "physic.h"
 
 // TODO Mutiple instancing
@@ -19,6 +18,13 @@ class Shape {
 public:
 	virtual void render(std::shared_ptr<Shader>& shader, unsigned int& texture) = 0;
 };
+
+class EmptyShape : public Shape {
+public:
+
+
+};
+
 
 struct Vertex {
     glm::vec3 pos;

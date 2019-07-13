@@ -29,10 +29,10 @@ private:
 
 	GameObj* createParticleSys(const std::string& shaderName, const std::string& texname) {
 		// num of particles
-		int n = 10;
+		int n = 6;
 		float mass = 1.f;
 
-		glm::vec3 c(0.f, 5.f, 0.f);
+		glm::vec3 c(1.f, 1.f, 0.f);
 		glm::vec3 x(1.f, 0.f, 0.f);
 		glm::vec3 y(0.f, 1.f, 0.f);
 		glm::vec3 z(0.f, 0.f, 1.f);
