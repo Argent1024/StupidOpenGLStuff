@@ -34,7 +34,8 @@ void Collision::intersectP(std::shared_ptr<PhySphere>& s1, std::shared_ptr<PhySp
     p1.n = -ndir;
     p2.n = ndir;
 
-    glm::vec3 vrel = p1.v - p2.v; 
+	/*This part is for simulate friction*/
+    /*glm::vec3 vrel = p1.v - p2.v; 
     float vnormal = glm::dot(vrel, ndir);
     if(std::abs(vnormal) >= 0.01f) {
         // Recalculate contact point and velocity but don't calculate normal again
@@ -48,7 +49,7 @@ void Collision::intersectP(std::shared_ptr<PhySphere>& s1, std::shared_ptr<PhySp
             phy1->getVelocityAt(p1.p, p1.v);
             phy2->getVelocityAt(p2.p, p2.v);
         }
-    }
+    }*/
 }
 
 void Collision::intersectP(std::shared_ptr<PhySphere>& sphere, std::shared_ptr<PhyPlane>& plane,
@@ -68,10 +69,12 @@ void Collision::intersectP(std::shared_ptr<PhySphere>& sphere, std::shared_ptr<P
 
     p2.n = plane->n;
     p1.n = -plane->n;
+
     phy1->getVelocityAt(p1.p, p1.v);
     phy2->getVelocityAt(p2.p, p2.v);
 
-    glm::vec3 vrel = p1.v - p2.v; 
+	/*This part of code simulate friction*/
+    /*glm::vec3 vrel = p1.v - p2.v; 
     // move contact point a little bit to simulate deformation
     float vnormal = glm::dot(vrel, dir);
     if(std::abs(vnormal) >= 0.01f) {
@@ -85,6 +88,6 @@ void Collision::intersectP(std::shared_ptr<PhySphere>& sphere, std::shared_ptr<P
             p1.p = sphere->center - sphere->radius * pdir1;
             phy1->getVelocityAt(p1.p, p1.v);
         }
-    }
+    } */
 }
 

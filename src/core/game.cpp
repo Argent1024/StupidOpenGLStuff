@@ -100,25 +100,25 @@ void Game::test_scene() {
 void Game::test_particle() {
 	glm::mat3 R(1.f);
 	Vertex a(
-		glm::vec3(10.f, -0.5f, 10.f),
+		glm::vec3(10.f, -0.f, 10.f),
 		glm::vec3(0.0f, 0.0f, 1.0f),
 		glm::vec2(1.0f, 1.0f)
 	);
 
 	Vertex b(
-		glm::vec3(10.f, -0.5f, -10.f),
+		glm::vec3(10.f, -0.f, -10.f),
 		glm::vec3(0.0f, 0.0f, 1.0f),
 		glm::vec2(1.0f, 0.0f)
 	);
 
 	Vertex c(
-		glm::vec3(-10.f, -0.5f, -10.f),
+		glm::vec3(-10.f, -0.f, -10.f),
 		glm::vec3(0.0f, 0.0f, 1.0f),
 		glm::vec2(0.0f, 0.0f)
 	);
 
 	Vertex d(
-		glm::vec3(-10.f, -0.5f, 10.f),
+		glm::vec3(-10.f, -0.f, 10.f),
 		glm::vec3(0.0f, 0.0f, 1.0f),
 		glm::vec2(0.0f, 1.0f)
 	);
@@ -136,6 +136,12 @@ void Game::test_particle() {
 	std::string shadername = "testshader";
 	GameShaderManger.load(shadername, vp, fp);
 
+	/*particle tex*/
+	std::string p_texpath = path + "textures/PoolBallSkins/Ball2.jpg";
+	std::string p_texname = "PraticeTEX";
+	GameTexManger.load(p_texname, p_texpath);
+	createParticleSys(shadername, p_texname);
+
 	/*Ground*/
 	std::string wall = "Wall";
 	std::string walltexp = path + "textures/2k_earth_daymap.jpg";
@@ -144,24 +150,25 @@ void Game::test_particle() {
 	glm::vec3 v(0.f, 0.f, 1.f);
 	glm::vec3 w(0.f, 1.f, 0.f);
 
-	glm::vec3 c0(0.f, -0.5f, 0.f);
-	std::shared_ptr<PhyShape> groundbv = std::make_shared<PhyPlane>(1.0, c0, u, v, 10.f, 10.f);
+	glm::vec3 c0(0.f, 0.f, 0.f);
+	float mass_boundary = 800.f;
+	std::shared_ptr<PhyShape> groundbv = std::make_shared<PhyPlane>(mass_boundary, c0, u, v, 100.f, 100.f);
 	
 
-	glm::vec3 cleft(-2.f, 0.f, 0.f);
-	std::shared_ptr<PhyShape> leftWall = std::make_shared<PhyPlane>(1.0, cleft, w, v, 10.f, 10.f);
+	glm::vec3 cleft(-1.5f, 0.f, 0.f);
+	std::shared_ptr<PhyShape> leftWall = std::make_shared<PhyPlane>(mass_boundary, cleft, w, v, 10.f, 10.f);
 	std::shared_ptr<PhysicState> lphy = std::make_shared<NoPhysic>(leftWall);
 
-	glm::vec3 cright(2.f, 0.f, 0.f);
-	std::shared_ptr<PhyShape> rightWall = std::make_shared<PhyPlane>(1.0, cright, w, v, 10.f, 10.f);
+	glm::vec3 cright(1.5f, 0.f, 0.f);
+	std::shared_ptr<PhyShape> rightWall = std::make_shared<PhyPlane>(mass_boundary, cright, w, v, 10.f, 10.f);
 	std::shared_ptr<PhysicState> rphy = std::make_shared<NoPhysic>(rightWall);
 
-	glm::vec3 cfront(0.f, 0.f, 2.f);
-	std::shared_ptr<PhyShape> frontWall = std::make_shared<PhyPlane>(1.0, cfront, u, w, 10.f, 10.f);
+	glm::vec3 cfront(0.f, 0.f, 1.5f);
+	std::shared_ptr<PhyShape> frontWall = std::make_shared<PhyPlane>(mass_boundary, cfront, u, w, 10.f, 10.f);
 	std::shared_ptr<PhysicState> fphy = std::make_shared<NoPhysic>(frontWall);
 
-	glm::vec3 cback(0.f, 0.f, -2.f);
-	std::shared_ptr<PhyShape> backWall = std::make_shared<PhyPlane>(1.0, cback, u, w, 10.f, 10.f);
+	glm::vec3 cback(0.f, 0.f, -1.5f);
+	std::shared_ptr<PhyShape> backWall = std::make_shared<PhyPlane>(mass_boundary, cback, u, w, 10.f, 10.f);
 	std::shared_ptr<PhysicState> bphy = std::make_shared<NoPhysic>(backWall);
 
 	GamePhysic.push_back(lphy);
@@ -171,12 +178,7 @@ void Game::test_particle() {
 
 	GameShapeManger.load("Ground", vertices, indices);
 	GameObj* obj0 = createObj(shadername, "Ground", groundbv, R, c0, wall, NOPHYSIC);
-	
-	/*particle tex*/
-	std::string p_texpath = path + "textures/PoolBallSkins/Ball2.jpg";
-	std::string p_texname = "PraticeTEX";
-	GameTexManger.load(p_texname, p_texpath);
-	createParticleSys(shadername, p_texname);
+
 }
 
 int Game::init() {
@@ -216,6 +218,7 @@ int Game::init() {
 }
 
 int Game::load() {
+	//test_scene();
 	test_particle();
 	return 0;
 }
@@ -234,8 +237,9 @@ int Game::run() {
         }
 
         // Updates
-		GamePhysic.update(1 / 30.f);
-        GamePhysic.updateForceField();
+		GamePhysic.updateForceField();
+		GamePhysic.update(1 / 100.f);
+
         GamePhysic.collisionDetection();
 
 		// Swap buffers

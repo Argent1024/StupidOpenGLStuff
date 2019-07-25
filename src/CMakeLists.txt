@@ -17,9 +17,6 @@ file( GLOB GAME_SRC
 	"core/*.cpp"
 	"physic/*.h"
 	"physic/*.cpp"
-	#"physic/particlesys.cpp"
-	#"physic/physhape.cpp"
-	#"physic/physic.cpp"
 )
 
 

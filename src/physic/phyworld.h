@@ -50,8 +50,8 @@ public:
                 // collision happen
                 // std::cout<< "collision happen!!!!!"<<std::endl;
                 // TODO go back some time to when collision happen
-                phy1->update(-1.f / 120.f);
-                phy2->update(-1.f / 120.f);
+                phy1->update(-1.f / 200.f);
+                phy2->update(-1.f / 200.f);
 
                 // calculate intersection point and normal
                 ContactPoint p1, p2;
@@ -62,9 +62,9 @@ public:
                 const float m2 = phy2->physhape->mass;
 
                 
-				if (glm::length(p1.v - p2.v) < 0.01f) { 
-					phy1->update(1.f / 120.f);
-					phy2->update(1.f / 120.f);
+				if (glm::length(p1.v - p2.v) < 0.001f) { 
+					phy1->update(1.f / 200.f);
+					phy2->update(1.f / 200.f);
 					continue; 
 				}
 
@@ -73,7 +73,7 @@ public:
                 
 
 				// TODO modify constant 
-                float c = (-62.5f / (1.f/m1 + 1.f/m2));
+                float c = (-52.5f / (1.f/m1 + 1.f/m2));
                 
 				glm::vec3 F1 = c * Vrel1;
                 glm::vec3 F2 = c * Vrel2;
@@ -81,8 +81,8 @@ public:
                 phy1->updateForce(p1.p, F1);
                 phy2->updateForce(p2.p, F2);
 
-                phy1->update(1.f / 120.f);
-                phy2->update(1.f / 120.f);
+                phy1->update(1.f / 200.f);
+                phy2->update(1.f / 200.f);
             }
         }
     }

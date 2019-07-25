@@ -15,7 +15,13 @@ Refactor & fix code in physic.h & bvh.h
 	modify dynamic type	
 
 Add Physics particles
-Use bvh for storing objs
+	Simple particles ✔️
+	SPH method ✔️
+	Spatial Tree✔️
+		Change collision detection, put it into praticlesys instead of into phyworld
+	  so it can use sph created....<- 真实垃圾代码
+
+Multithreading
 
 /*LIGHTING*/
 Add light

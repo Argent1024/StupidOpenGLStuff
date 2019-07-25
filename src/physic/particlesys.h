@@ -1,13 +1,17 @@
 #ifndef PARTICLESYS_H
 #define PARTICLESYS_H
 
+#define PS_Node_PTR std::shared_ptr<SPNode<int>> 
+
 #include <vector>
 #include <cmath>
+#include <algorithm>
 
 #include <glm/glm.hpp>  
 #include <glm/ext.hpp>
 
 #include "bvh.h"
+#include "spTree.h"
 
 #include "physic.h"
 #include "physhape.h"
@@ -18,7 +22,7 @@
 	Particle System using SPH method
 */
 
-class ParticleState: public PhysicState{
+class ParticleState: public PhysicState {
 /*
 	State for one particle
 	physhape points to the shape of this particle, e.x. sphere
@@ -64,11 +68,10 @@ public:
 	}
 };
 
-
-
 class ParticleSystem  {
 public:
 	std::vector<std::shared_ptr<ParticleState>> particles;
+	std::vector<PS_Node_PTR> nodeList;
 	//BoxBV bv;
 	float r;
 
@@ -96,19 +99,35 @@ public:
 			for (int j = 0; j < n; j++) {
 				for (int k = 0; k < n; k++) {
 					glm::vec3 pos = start + bv.x * len * i / n + bv.y * len * j / n + bv.z * len * k / n;
-					std::shared_ptr<PhyShape> shape = std::make_shared<PhySphere>(radius, m_particle, pos);
+					std::shared_ptr<PhyShape> shape = std::make_shared<PhySphere>(radius, mass, pos);
 					particles.push_back(std::make_shared<ParticleState>(pos, shape, density, pressure));
 				}
 			}
 		}
 	}
+	
+	bool insideBV(std::shared_ptr<ParticleState>& p, PS_Node_PTR& bv) {
+		glm::vec3 dir = p->transition - bv->center;
+		
+		float x = std::abs(glm::dot(dir, bv->x));
+		float y = std::abs(glm::dot(dir, bv->y));
+		float z = std::abs(glm::dot(dir, bv->z));
+		return x < bv->lenx && y < bv->leny  && z < bv->lenz;
+	}
+	
+	// Helper method for createRoot
+	void getMax(glm::vec3& max, const glm::vec3& p, int d);
+	void getMin(glm::vec3& max, const glm::vec3& p, int d);
+
+	PS_Node_PTR ParticleSystem::createRoot();
+
+	PS_Node_PTR createSPTree(int height);
 
 	virtual void updatePressureDensity();
 
 	virtual void update();
 	
 };
-
 
 // Render different ball for now, change later
 class ParticleShape : public Shape {
@@ -117,7 +136,7 @@ public:
 	std::shared_ptr<ParticleSystem> particleSys;
 
 	ParticleShape(std::shared_ptr<ParticleSystem> particleSys, std::vector<Vertex> vertices, std::vector<unsigned int> indices)
-		:mesh(vertices, indices), particleSys(particleSys){
+		:mesh(vertices, indices), particleSys(particleSys) {
 		//BallHelper::initVertices(10, radius, vertices, indices);
 	}
 
@@ -129,5 +148,7 @@ public:
 	}
 
 };
+
+
 
 #endif // PARTICLESYS_H
