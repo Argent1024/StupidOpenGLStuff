@@ -9,6 +9,7 @@ class PhysicWorld {
 public:
     //TODO Use BVH
     std::vector<std::shared_ptr<PhysicState>> phyobjs;
+
 	std::vector<std::shared_ptr<ParticleSystem>> particleSystem;
 
     void push_back(std::shared_ptr<PhysicState> phy) {

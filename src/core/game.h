@@ -29,7 +29,7 @@ private:
 
 	GameObj* createParticleSys(const std::string& shaderName, const std::string& texname) {
 		// num of particles
-		int n = 10;
+		int n = 7;
 		float mass = 1.f;
 
 		glm::vec3 c(0.5f, 2.0f, 0.f);
@@ -41,7 +41,7 @@ private:
 		std::shared_ptr<ParticleSystem> particlesys = std::make_shared<ParticleSystem>();
 		particlesys->init(n, mass, bv, particlesys);
 
-		int sample = 5;
+		int sample = 10;
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
 		BallHelper::initVertices(sample, particlesys->r, vertices, indices);

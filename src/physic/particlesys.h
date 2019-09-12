@@ -132,7 +132,7 @@ public:
 // Render different ball for now, change later
 class ParticleShape : public Shape {
 public:
-	TriMesh mesh;
+	TriMesh mesh; // Just render a ball for now
 	std::shared_ptr<ParticleSystem> particleSys;
 
 	ParticleShape(std::shared_ptr<ParticleSystem> particleSys, std::vector<Vertex> vertices, std::vector<unsigned int> indices)

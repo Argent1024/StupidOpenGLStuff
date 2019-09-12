@@ -114,7 +114,7 @@ PS_Node_PTR ParticleSystem::createSPTree(int height) {
 
 	int h = 1;
 	int sum = 0;
-	std::cout << "Creating SPTree, nodes has praticle:";
+	//std::cout << "Creating SPTree, nodes has praticle:";
 	// create tree
 	while (node) {
 		if (h == height) {
@@ -125,7 +125,7 @@ PS_Node_PTR ParticleSystem::createSPTree(int height) {
 				if (insideBV(particles[i], node)) { node->v.push_back(i); }
 			}
 			nodeList.push_back(node);
-			std::cout << node->v.size() <<" ";
+			//std::cout << node->v.size() <<" ";
 			sum += node->v.size();
 			node = node->parent;
 			h--;
@@ -152,34 +152,41 @@ PS_Node_PTR ParticleSystem::createSPTree(int height) {
 			}
 		}
 	}
-	std::cout << std::endl;
-	std::cout << "SPTree finished, with particle: " << sum << std::endl;
+	//std::cout << std::endl;
+	//std::cout << "SPTree finished, with particle: " << sum << std::endl;
 	return root;
 }
 
 void ParticleSystem::updatePressureDensity() {
-	const float h = 1.f;
+	const float h = .5f;
 	const int n = particles.size();
-	std::vector<float> pressure;
-	
-	//TODO DENSITY
-	for (int i = 0; i < n; i++) {
-		float p = 0;
-		float d = 0;
-		for (int j = 0; j < n; j++) {
-			if (i == j) continue;
+	std::vector<float> pressure(n, 0);
+	int i, j;
+	float p, w;
+	for (PS_Node_PTR& node_ptr : nodeList) {
+		std::vector<int>& pindex = node_ptr->v; // particle index list in that bv
+		if (pindex.size() == 0) continue;
+		p = 0;
+		for (int x = 0; x < pindex.size(); x++) {
+			glm::vec3 visocityF(0.f, 0.f, 0.f);
+			glm::vec3 pressureF(0.f, 0.f, 0.f);
+			glm::vec3 surfaceF(0.f, 0.f, 0.f);
+			glm::vec3 collisionF(0.f, 0.f, 0.f); // force to calculate collision
 
-			const glm::vec3& xi = particles[i]->transition;
-			const glm::vec3& xj = particles[j]->transition;
-			float r = glm::length(xi - xj);
+			i = pindex[x];
+			for (int y = 0; y < pindex.size(); y++) {
+				if (x == y) continue;
+				j = pindex[y];
+				const glm::vec3& xi = particles[i]->transition;
+				const glm::vec3& xj = particles[j]->transition;
+				float r = glm::length(xi - xj);
 
-			float pj = particles[j]->pressure;
-
-			float w = Wpoly(r, h);
-			
-			p += w * pj;
+				float pj = particles[j]->pressure;
+				w = Wpoly(r, h);
+				p += w * pj;
+			}
+			pressure[i] = 0.001f * p;
 		}
-		pressure.push_back(p);
 	}
 
 	for (int i = 0; i < n; i++) {
@@ -192,7 +199,7 @@ void ParticleSystem::updatePressureDensity() {
 
 void ParticleSystem::update() {
 	createSPTree(8);
-	//updatePressureDensity();
+	updatePressureDensity();
 	const float h = .5f;
 	const int n = particles.size();
 	int i, j;
@@ -205,6 +212,8 @@ void ParticleSystem::update() {
 			glm::vec3 visocityF(0.f, 0.f, 0.f);
 			glm::vec3 pressureF(0.f, 0.f, 0.f);
 			glm::vec3 surfaceF(0.f, 0.f, 0.f);
+			glm::vec3 collisionF(0.f, 0.f, 0.f); // force to calculate collision
+
 			i = pindex[x];
 			for (int y = 0; y < pindex.size(); y++) {
 				if (x == y) continue;
@@ -220,11 +229,12 @@ void ParticleSystem::update() {
 				float r = glm::length(xi - xj);
 
 				float wPressure = gradSpiky(r, h);
-				pressureF += 0.001f * wPressure * pj * (xi - xj) / r;
+				pressureF += 0.002f * wPressure * pi / pj * (xi - xj) / r;
 
 				float lapV = laplacianVisco(r, h);
 				//glm::vec3 gradW = gradWpoly()
-				visocityF += 0.01f * lapV * (vj - vi);
+				visocityF += 1.f * lapV * (vj - vi);
+
 			}
 			//std::cout << glm::to_string(visocityF) << "," << glm::to_string(pressureF) << std::endl;
 			forces[i] = (visocityF - pressureF);
@@ -234,5 +244,5 @@ void ParticleSystem::update() {
 	for (int i = 0; i < particles.size(); i++) {
 		particles[i]->updateForce(forces[i]);
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 }

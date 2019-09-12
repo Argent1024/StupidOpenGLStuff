@@ -112,7 +112,7 @@ public:
 		const glm::vec3& n = p->n;
 		float distance = std::abs(glm::dot(c1 - c2, n));
 		//TODO hard code 1.5f here to make sphere don't just go across plane....
-		if(distance > 1.5f * s->radius) return false;
+		if(distance > 2.0f * s->radius) return false;
 		float x = std::abs(glm::dot(c1 - c2, p->u));
 		float y = std::abs(glm::dot(c1 - c2, p->v));
 		return x < p->maxu && y < p->maxv;
